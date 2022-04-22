@@ -2,6 +2,7 @@ from roboticstoolbox import Bicycle, RandomPath, VehicleIcon, RangeBearingSensor
 from math import pi, atan2
 import matplotlib.pyplot as plt
 import numpy as np
+from sympy import false
 
 #Enter Starting coordinates
 # for coordinates input enter three numbers seperated by a space.
@@ -9,8 +10,8 @@ anim = VehicleIcon('robot.png', scale = 2)
 veh = Bicycle(
 animation = anim,
 control = RandomPath,
-dim = 10,
-x0 = list(map(int, input("Enter start coordinates: ").split()))   
+dim = 20,
+x0 = list(map(int, input("Enter start coordinates:").split()))   
 )
 veh.init(plot=True)
 print(veh.x)
@@ -19,20 +20,33 @@ print(veh.x)
 
 
 # Set target coordinates
+# Seperate the numbers by a space.
 
 goal = list(map(int, input("Enter target coordinates: ").split()));
 goal_marker_style = {
  'marker': 'D',
  'markersize': 6,
- 'color': 'b',
+ 'color': 'b',    
 }
+plt.plot(goal[0], goal[1], **goal_marker_style)
+
+
+
+
+# Input the number of obstacles on the map
+map = LandmarkMap (int(input("enter number of obstacles")), 20)
+map.plot()
+
+# Sensor 
+sensor= RangeBearingSensor (robot=veh, map= map ,animate=True )
+print('Sensor readings: \n', sensor.h(veh.x))
+
 
 
 
 
 run=True
 while(run):
-
  #Step 2
  goal_heading = atan2(
  goal[1] - veh.x[1],
@@ -44,21 +58,25 @@ while(run):
  #Step 4
  veh.step(2,steer)
  #Step 5
- if((abs(goal[0]-veh.x[0]) >0.05) or (abs(goal[1]-veh.x[1]) > 0.05)):
-    run=True
- else:
-    run=False
+ for i in sensor.h (veh.x):
+   if (i[0] < 3):
+      if (abs(i [1]) < pi/ 4):
+         run = False
+   
+
  #Step 6
+ veh._animation.update(veh.x)
+ plt.pause(0.005)
+plt.pause(100)
 
- map = LandmarkMap(3, 20)
-map.plot()
 
-sensor= RangeBearingSensor (robot=veh, map= map ,animate=True )
-print('Sensor readings: \n', sensor.h(veh.x))
 
-distances = [i[0] for i in sensor.h(veh.x)]
-angles = [i[1]*(180/pi) for i in sensor.h(veh.x)]
-plt.pause(1000 )
+
+
+
+
+
+
+plt.pause(1000)
 veh._animation.update(veh.x)
-plt.plot(goal[0], goal[1], **goal_marker_style)
 plt.pause(100)
