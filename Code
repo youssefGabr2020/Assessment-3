@@ -1,27 +1,22 @@
+#Import needed libraries
 from roboticstoolbox import Bicycle, RandomPath, VehicleIcon, RangeBearingSensor, LandmarkMap
-from math import pi, atan2
+from math import pi, atan2, sqrt
 import matplotlib.pyplot as plt
 import numpy as np
-from sympy import false
 
 #Enter Starting coordinates
-# for coordinates input enter three numbers seperated by a space.
-anim = VehicleIcon('robot.png', scale = 2)
+# For coordinates input, enter three numbers seperated by a space.
+anim = VehicleIcon('robot.png', scale = 1.5)
 veh = Bicycle(
 animation = anim,
 control = RandomPath,
-dim = 20,
 x0 = list(map(int, input("Enter start coordinates:").split()))   
 )
 veh.init(plot=True)
 print(veh.x)
 
-
-
-
 # Set target coordinates
-# Seperate the numbers by a space.
-
+# Seperate the two numbers by a space.
 goal = list(map(int, input("Enter target coordinates: ").split()));
 goal_marker_style = {
  'marker': 'D',
@@ -29,9 +24,6 @@ goal_marker_style = {
  'color': 'b',    
 }
 plt.plot(goal[0], goal[1], **goal_marker_style)
-
-
-
 
 # Input the number of obstacles on the map
 map = LandmarkMap (int(input("enter number of obstacles")), 20)
@@ -42,40 +34,35 @@ sensor= RangeBearingSensor (robot=veh, map= map ,animate=True )
 print('Sensor readings: \n', sensor.h(veh.x))
 
 
-
-
-
+# Obstacle avoidance and target reaching
 run=True
 while(run):
- #Step 2
- goal_heading = atan2(
- goal[1] - veh.x[1],
- goal[0] - veh.x[0]
- )
- #Step 3
+   remDist = sqrt( ((int(veh.x[0])-int(goal[0]))**2)+((int(veh.x[1])-int(goal[1]))**2) )
+   if remDist <= 0.2:
+      run = False
+   print(remDist) # Displays and updates distance from Robot to target
 
- steer = goal_heading- veh.x[2]
- #Step 4
- veh.step(2,steer)
- #Step 5
- for i in sensor.h (veh.x):
-   if (i[0] < 3):
-      if (abs(i [1]) < pi/ 4):
-         run = False
-   
+ #Heading
+   goal_heading = atan2(
+   goal[1] - veh.x[1],
+   goal[0] - veh.x[0]
+   )
 
- #Step 6
- veh._animation.update(veh.x)
- plt.pause(0.005)
+   #Robot movement
+   steer = goal_heading- veh.x[2]
+   veh.step(2,steer)
+
+   #Conditions for obstacle avoidance
+   print()
+   for i in sensor.h (veh.x):
+      
+      if (i[0] < 2):
+         if (abs(i [1]) < pi/ 4):
+            veh.step(1,4)
+
+   veh._animation.update(veh.x)
+   plt.pause(0.005)
 plt.pause(100)
-
-
-
-
-
-
-
-
 
 plt.pause(1000)
 veh._animation.update(veh.x)
