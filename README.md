@@ -8,7 +8,7 @@
 
 3. Thirdly, define number of obstacles and map size. Using the `map = LandmarkMap (int(input("enter number of obstacles")), 20)` function we allowed the user the input an integer value representing the number of randomly placed obstacles in a 20m by 20m map.
 
-**Output image after user inputs:**
+**Example of output image after user inputs:**
 ![User input pic](https://user-images.githubusercontent.com/99170649/164945994-0df0d191-b407-4afc-a527-091566eb8339.PNG)
 
  *Software versions:*
