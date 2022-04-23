@@ -36,7 +36,8 @@ Using a `for` loop for i in `sensor.h`function and using `if` statements such as
 
 ### Further Improvements:
 
--One aspect to further improve is updating the distance and angle readings from the sensor and displaying them on the output.
--Improve smoothness of motion of the robot for better visuals.
--
+1. One aspect to further improve is updating the distance and angle readings from the sensor and displaying them on the output.
+2. Improve smoothness of motion of the robot for better visuals.
+3. Add more than one way to avoid obstacles instead of only turning right.
+
 
