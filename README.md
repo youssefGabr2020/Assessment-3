@@ -30,6 +30,13 @@ The robot uses the `veh.step` and `steer` functions to move and change angles wh
 Using a `for` loop for i in `sensor.h`function and using `if` statements such as ` if (i[0] < 2):`
          `if (abs(i [1]) < pi/ 4):` allow the robot to avoid hitting any obstacle, additionally the `veh.step(1,4)` function makes it so that the robot may maneuver around any approaching obstacles by always *turning right*. 
 
-
+**Block diagram:**
   
+![Task3 robot block diagram](https://user-images.githubusercontent.com/99170649/164946678-70fb5241-9827-4e4b-9204-d379305af66a.png)
+
+### Further Improvements:
+
+-One aspect to further improve is updating the distance and angle readings from the sensor and displaying them on the output.
+-Improve smoothness of motion of the robot for better visuals.
+-
 
